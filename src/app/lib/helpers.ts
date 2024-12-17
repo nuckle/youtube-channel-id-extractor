@@ -38,7 +38,7 @@ export async function extractChannelIdFromHtml(html: string): Promise<string> {
 	}
 }
 
-export async function extractChannelNameFromHtml(html: string) {
+export async function extractChannelNameFromHtml(html: string):Promise<string | undefined> {
 	const $ = cheerio.load(html);
 
 	const linkElement = $('link[itemprop="name"]');
@@ -73,7 +73,7 @@ export async function extractHtml(response: Response): Promise<string> {
 	return text;
 }
 
-export function extractRssHrefFromHtml(html: string) {
+export function extractRssHrefFromHtml(html: string):string {
 	try {
 		const $ = cheerio.load(html);
 
@@ -90,17 +90,17 @@ export function extractRssHrefFromHtml(html: string) {
 	}
 }
 
-export function generateChannelUrl(id: string) {
+export function generateChannelUrl(id: string):string {
 	const baseUrl = 'https://www.youtube.com/channel';
 	return `${baseUrl}/${id}`;
 }
 
-export function generateRsslUrl(id: string) {
+export function generateRsslUrl(id: string):string {
 	const baseUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id';
 	return `${baseUrl}=${id}`;
 }
 
-export function extractChannelIdFromChannelHref(href: string) {
+export function extractChannelIdFromChannelHref(href: string):string {
 	try {
 		const url = new URL(href);
 		const searchParams = url.searchParams;
