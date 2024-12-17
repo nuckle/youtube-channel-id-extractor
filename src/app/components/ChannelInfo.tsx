@@ -4,13 +4,9 @@ import { Divider } from "@nextui-org/divider";
 import { Link } from "@nextui-org/link";
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
+import { ChannelDataType } from "../types/channelType";
 
-interface ChannelInfoprops {
-    id: string;
-    channelUrl: string;
-}
-
-export default function ChannelInfo({ id, channelUrl }: ChannelInfoprops) {
+export default function ChannelInfo({ id, channelUrl }: ChannelDataType) {
 
     const [isCopied, setIsCopied] = useState(false)
 
