@@ -21,17 +21,7 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 		const html = await extractHtml(response);
 		const id = await extractChannelIdFromHtml(html);
 		const channelUrl = generateChannelUrl(id);
-
-		// Depending on IP, html may not contain
-		// the link tag with channel name
-		let name = await extractChannelNameFromHtml(html);
-		if (!name) {
-			const response = await customFetch(channelUrl);
-			const html = await extractHtml(response);
-			name = await extractChannelNameFromHtml(html);
-		}
-
-		if (!name) throw new Error('Name was not found in html');
+		const name = await extractChannelNameFromHtml(html, channelUrl);
 
 		const rssUrl = generateRsslUrl(id);
 
@@ -42,6 +32,7 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			name: name,
 		};
 	} catch (error) {
+		console.log(error);
 		throw new Error(`Failed to process the URL: ${error}`);
 	}
 }

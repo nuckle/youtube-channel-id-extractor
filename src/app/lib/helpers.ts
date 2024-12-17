@@ -2,7 +2,26 @@ import 'server-only';
 
 import * as cheerio from 'cheerio';
 import { HeaderGenerator } from 'header-generator';
-import { browseIdType } from '../types/browseIdType';
+
+function findValueByKeyPath<T>(
+	obj: T,
+	keyPath: (obj: T) => string | null,
+): string | null {
+	if (typeof obj !== 'object' || obj === null) return null;
+
+	const browseId = keyPath(obj);
+	if (browseId) return browseId;
+
+	for (const key in obj) {
+		const value = obj[key as keyof T];
+		if (typeof value === 'object' && value !== null) {
+			const result = findValueByKeyPath(value as T, keyPath);
+			if (result) return result;
+		}
+	}
+
+	return null;
+}
 
 type Headers = Record<string, string>;
 export function getHeaders(headers = {}): Headers {
@@ -23,15 +42,18 @@ export function getHeaders(headers = {}): Headers {
 
 export async function extractChannelIdFromHtml(html: string): Promise<string> {
 	try {
-		try {
-			const rssHref = extractRssHrefFromHtml(html);
-			return extractChannelIdFromChannelHref(rssHref);
-		} catch {
-			const id = await extractIdFromHtmlJson(html);
+		const extractors = [
+			extractIdFromHtmlRss,
+			extractIdFromHtmlJson,
+			extractIdFromHtmlMetaTag,
+		];
 
-			if (!id) throw new Error('Channel ID not found in HTML');
-			return id;
+		for (const extractor of extractors) {
+			const id = await extractor(html);
+			if (id) return id;
 		}
+
+		throw new Error('Channel ID not found in HTML');
 	} catch (error) {
 		throw new Error(
 			`An error occurred while extracting channel ID from HTML: ${error}`,
@@ -39,15 +61,41 @@ export async function extractChannelIdFromHtml(html: string): Promise<string> {
 	}
 }
 
-export async function extractChannelNameFromHtml(
-	html: string,
-): Promise<string | undefined> {
+async function extractIdFromHtmlRss(html: string): Promise<string | null> {
+	const rssHref = extractRssHrefFromHtml(html);
+	if (rssHref) {
+		const id = await extractChannelIdFromRsslHref(rssHref);
+		return id;
+	}
+	return null;
+}
+
+function extractRssHrefFromHtml(html: string): string | null {
 	const $ = cheerio.load(html);
 
-	const linkElement = $('link[itemprop="name"]');
-	const name = linkElement.attr('content');
+	const linkElement = $('link[rel="alternate"][type="application/rss+xml"]');
+	const href = linkElement.attr('href');
 
-	return name;
+	return href || null;
+}
+
+async function extractChannelIdFromRsslHref(
+	href: string,
+): Promise<string | null> {
+	const url = new URL(href);
+	const searchParams = url.searchParams;
+	const channelId = searchParams.get('channel_id');
+
+	return channelId;
+}
+
+async function extractIdFromHtmlMetaTag(html: string): Promise<string | null> {
+	const $ = cheerio.load(html);
+
+	const linkElement = $('meta[itemprop="channelId"]');
+	const id = linkElement.attr('content');
+
+	return id || null;
 }
 
 async function extractIdFromHtmlJson(html: string): Promise<string | null> {
@@ -56,34 +104,34 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 
 	$('script').each((_, element) => {
 		const scriptContent = $(element).html();
-		if (scriptContent && scriptContent.includes('structuredDescriptionContentRenderer')) {
-			const match = scriptContent.match(/var ytInitialData = ({[\s\S]*?});/);
+		if (
+			scriptContent &&
+			(scriptContent.includes('structuredDescriptionContentRenderer') ||
+				scriptContent.includes('twoColumnWatchNextResults'))
+		) {
+			const match =
+				scriptContent.match(/var ytInitialData = ({[\s\S]*?});/) ||
+				scriptContent.match(/window\["ytInitialData"\] = ({[\s\S]*?});/);
+
 			if (match) {
 				try {
 					const jsonData = JSON.parse(match[1]);
 
-					// Traverse JSON to locate `videoOwnerRenderer`
-
-					function findBrowseId(obj: browseIdType): string | null {
-						if (typeof obj !== 'object' || obj === null) return null;
-
-						const browseId =
+					channelId = findValueByKeyPath(
+						jsonData,
+						(obj) =>
 							obj.videoDescriptionHeaderRenderer?.channelNavigationEndpoint
-								?.browseEndpoint?.browseId;
-						if (browseId) return browseId;
+								?.browseEndpoint?.browseId || null,
+					);
 
-						for (const key in obj) {
-							const value = obj[key];
-							if (typeof value === 'object' && value !== null) {
-								const result = findBrowseId(value as browseIdType);
-								if (result) return result;
-							}
-						}
-
-						return null;
+					if (!channelId) {
+						channelId = findValueByKeyPath(
+							jsonData,
+							(obj) =>
+								obj.videoOwnerRenderer?.title?.runs?.[0]?.navigationEndpoint
+									?.browseEndpoint?.browseId || null,
+						);
 					}
-
-					channelId = findBrowseId(jsonData);
 					if (channelId) return false;
 				} catch (error) {
 					console.error('Failed to parse JSON:', error);
@@ -95,27 +143,105 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 	return channelId;
 }
 
+export async function extractChannelNameFromHtml(
+	html: string,
+	channelUrl: string,
+): Promise<string> {
+	try {
+		const extractors = [
+			extractChannelNameFromHtmlJson,
+			extractChannelNameFromHtmlLinkTag,
+			extractChannelNameFromHtmlMetaTag,
+			async () => {
+				const response = await customFetch(channelUrl);
+				const newHtml = await extractHtml(response);
+				return extractChannelNameFromHtmlLinkTag(newHtml);
+			},
+		];
+
+		for (const extractor of extractors) {
+			const name = await extractor(html);
+			if (name) return name;
+		}
+
+		throw new Error('Channel name not found in HTML');
+	} catch (error) {
+		throw new Error(
+			`Failed to extract channel name from HTML: ${(error as Error).message}`,
+		);
+	}
+}
+
+async function extractChannelNameFromHtmlMetaTag(
+	html: string,
+): Promise<string | null> {
+	const $ = cheerio.load(html);
+
+	const metaElement = $('meta[itemprop="name"]');
+	const name = metaElement.attr('content');
+
+	return name || null;
+}
+
+async function extractChannelNameFromHtmlLinkTag(
+	html: string,
+): Promise<string | null> {
+	const $ = cheerio.load(html);
+
+	const linkElement = $('link[itemprop="name"]');
+	const name = linkElement.attr('content');
+
+	return name || null;
+}
+
+async function extractChannelNameFromHtmlJson(
+	html: string,
+): Promise<string | null> {
+	const $ = cheerio.load(html);
+	let channelName: string | null = null;
+
+	$('script').each((_, element) => {
+		const scriptContent = $(element).html();
+		if (
+			scriptContent &&
+			(scriptContent.includes('structuredDescriptionContentRenderer') ||
+				scriptContent.includes('twoColumnWatchNextResults') ||
+				scriptContent.includes('afv_ad_tag_restricted_to_instream') ||
+				scriptContent.includes('args'))
+		) {
+			// Only in old versions of YouTube
+			const match =
+				scriptContent.match(/window\["ytInitialData"\] = ({[\s\S]*?});/) ||
+				scriptContent.match(
+					/var\s+ytplayer\s*=\s*ytplayer\s*\|\|\s*{};\s*ytplayer\.config\s*=\s*(\{[\s\S]*?\})(?=;|\n)/,
+				);
+
+			if (match) {
+				const jsonData = JSON.parse(match[1]);
+
+				channelName = findValueByKeyPath(
+					jsonData,
+					(obj) => obj.videoOwnerRenderer?.title?.runs?.[0]?.text || null,
+				);
+
+				if (!channelName)
+					channelName = findValueByKeyPath(
+						jsonData,
+						(obj) => obj.args?.author || null,
+					);
+
+				if (channelName) return false;
+			}
+		}
+	});
+
+	return channelName;
+}
+
 export async function extractHtml(response: Response): Promise<string> {
 	const text = await response.text();
 
 	return text;
-}
-
-export function extractRssHrefFromHtml(html: string): string {
-	try {
-		const $ = cheerio.load(html);
-
-		const linkElement = $('link[rel="alternate"][type="application/rss+xml"]');
-		const href = linkElement.attr('href');
-
-		if (!href) throw new Error('Href was not found in RSS');
-
-		return href;
-	} catch (error) {
-		throw new Error(
-			`An error happened during RSS href extraction from Html: ${error}`,
-		);
-	}
 }
 
 export function generateChannelUrl(id: string): string {
@@ -126,22 +252,6 @@ export function generateChannelUrl(id: string): string {
 export function generateRsslUrl(id: string): string {
 	const baseUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id';
 	return `${baseUrl}=${id}`;
-}
-
-export function extractChannelIdFromChannelHref(href: string): string {
-	try {
-		const url = new URL(href);
-		const searchParams = url.searchParams;
-		const channelId = searchParams.get('channel_id');
-
-		if (!channelId) throw new Error('Channel Id was not found in RSS href');
-
-		return channelId;
-	} catch (error) {
-		throw new Error(
-			`An error happened during channel id extraction from RSS href: ${error}`,
-		);
-	}
 }
 
 export async function customFetch(
