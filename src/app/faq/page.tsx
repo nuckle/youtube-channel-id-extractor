@@ -45,13 +45,15 @@ export default function Faq() {
 							<li>https://www.youtube.com/user/username</li>
 							<li>https://www.youtube.com/@channel_handle</li>
 							<li>https://www.youtube.com/c/custom_url</li>
+							<li>https://www.youtube.com/watch?v=video_url</li>
+							<li>https://www.youtube.com/playlist?list=playlist_url</li>
 						</ul>
 						<p className='mt-2'>
 							The tool also supports links from Wayback Machine:
 						</p>
 						<ul className='list-disc pl-6 mt-2'>
 							<li className='break-words'>
-								https://web.archive.org/web/20221218220114/https://www.youtube.com/@channel_handle
+								https://web.archive.org/web/20211218220114/https://www.youtube.com/c/custom_url
 							</li>
 						</ul>
 					</div>

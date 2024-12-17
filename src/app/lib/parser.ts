@@ -3,9 +3,9 @@
 import { ChannelDataType } from '../types/channelType';
 import {
 	customFetch,
-	extractChannelIdFromChannelHref,
+	extractChannelIdFromHtml,
+	extractChannelNameFromHtml,
 	extractHtml,
-	extractRssHrefFromHtml,
 	generateChannelUrl,
 	generateRsslUrl,
 } from './helpers';
@@ -18,13 +18,12 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			throw new Error('No initial response');
 		}
 
-		if (!response.ok)
-			throw new Error('Invalid response code from the server');
+		if (!response.ok) throw new Error('Invalid response code from the server');
 
 		const html = await extractHtml(response);
-		const href = extractRssHrefFromHtml(html);
+		const id = await extractChannelIdFromHtml(html);
+		const name = await extractChannelNameFromHtml(html);
 
-		const id = extractChannelIdFromChannelHref(href);
 		const channelUrl = generateChannelUrl(id);
 		const rssUrl = generateRsslUrl(id);
 
@@ -32,6 +31,7 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			id: id,
 			channelUrl: channelUrl,
 			rssUrl: rssUrl,
+			name: name,
 		};
 	} catch (error) {
 		throw new Error(`Failed to process the URL: ${error}`);

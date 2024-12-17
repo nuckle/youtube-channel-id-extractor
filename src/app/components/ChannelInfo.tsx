@@ -12,6 +12,7 @@ export default function ChannelInfo({
 	id,
 	channelUrl,
 	rssUrl,
+	name,
 }: ChannelDataType) {
 	const { pending } = useFormStatus();
 	const [isCopied, setIsCopied] = useState(false);
@@ -33,6 +34,12 @@ export default function ChannelInfo({
 			</CardHeader>
 			<Divider />
 			<CardBody>
+				<div className='mb-2'>
+					<p className='text-sm text-muted-foreground mb-1'>Channel Name:</p>
+					<Skeleton isLoaded={!pending}>
+						<p>{name}</p>
+					</Skeleton>
+				</div>
 				<div className='mb-2'>
 					<p className='text-sm text-muted-foreground'>Channel ID:</p>
 					<Skeleton className='flex items-center space-x-2' isLoaded={!pending}>

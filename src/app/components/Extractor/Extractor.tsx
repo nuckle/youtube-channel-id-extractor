@@ -29,9 +29,11 @@ export default function Extractor() {
 							state.message && <ErrorMessage text={state.message} />}
 						{state.data &&
 							state.data.id &&
+							state.data.name &&
 							state.data.channelUrl &&
 							state.data.rssUrl && (
 								<ChannelInfo
+									name={state.data.name}
 									id={state.data.id}
 									channelUrl={state.data.channelUrl}
 									rssUrl={state.data.rssUrl}

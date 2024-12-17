@@ -20,6 +20,61 @@ export function getHeaders(headers = {}): Headers {
 	return Object.assign(headers, headerGenerator.getHeaders());
 }
 
+export async function extractChannelIdFromHtml(html: string): Promise<string> {
+	try {
+		try {
+			const rssHref = extractRssHrefFromHtml(html);
+			return extractChannelIdFromChannelHref(rssHref);
+		} catch {
+			const id = await extractIdFromHtmlJson(html);
+
+			if (!id) throw new Error('Channel ID not found in HTML');
+			return id;
+		}
+	} catch (error) {
+		throw new Error(
+			`An error occurred while extracting channel ID from HTML: ${error}`,
+		);
+	}
+}
+
+export async function extractChannelNameFromHtml(html: string) {
+	try {
+		const $ = cheerio.load(html);
+
+		const linkElement = $('link[itemprop="name"]');
+		const name = linkElement.attr('content');
+
+		if (!name) throw new Error('Name was not found in html');
+
+		return name;
+	} catch (error) {
+		throw new Error(
+			`An error happened during channel name extraction from Html: ${error}`,
+		);
+	}
+}
+
+async function extractIdFromHtmlJson(html: string): Promise<string | null> {
+	const $ = cheerio.load(html);
+	let channelId: string | null = null;
+
+	$('script').each((_, element) => {
+		const scriptContent = $(element).html();
+		if (scriptContent && scriptContent.includes('webCommandMetadata')) {
+			const match = scriptContent.match(
+				/"url":"\/channel\/(UC[a-zA-Z0-9_-]{22})"/,
+			);
+			if (match) {
+				channelId = match[1];
+				return false;
+			}
+		}
+	});
+
+	return channelId;
+}
+
 export async function extractHtml(response: Response): Promise<string> {
 	const text = await response.text();
 
