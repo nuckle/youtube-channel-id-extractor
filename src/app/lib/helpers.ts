@@ -38,7 +38,9 @@ export async function extractChannelIdFromHtml(html: string): Promise<string> {
 	}
 }
 
-export async function extractChannelNameFromHtml(html: string):Promise<string | undefined> {
+export async function extractChannelNameFromHtml(
+	html: string,
+): Promise<string | undefined> {
 	const $ = cheerio.load(html);
 
 	const linkElement = $('link[itemprop="name"]');
@@ -53,13 +55,37 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 
 	$('script').each((_, element) => {
 		const scriptContent = $(element).html();
-		if (scriptContent && scriptContent.includes('webCommandMetadata')) {
-			const match = scriptContent.match(
-				/"url":"\/channel\/(UC[a-zA-Z0-9_-]{22})"/,
-			);
+		if (scriptContent && scriptContent.includes('videoSecondaryInfoRenderer')) {
+			const match = scriptContent.match(/var ytInitialData = ({[\s\S]*?});/);
 			if (match) {
-				channelId = match[1];
-				return false;
+				try {
+					const jsonData = JSON.parse(match[1]);
+
+					// Traverse JSON to locate `videoOwnerRenderer`
+					function findBrowseId(obj: Record<string, any>): string | null {
+						if (typeof obj !== 'object' || obj === null) return null;
+
+						if (
+							obj.videoOwnerRenderer?.title?.runs?.[0]?.navigationEndpoint
+								?.browseEndpoint?.browseId
+						) {
+							return obj.videoOwnerRenderer.title.runs[0].navigationEndpoint
+								.browseEndpoint.browseId;
+						}
+
+						for (const key in obj) {
+							const result = findBrowseId(obj[key]);
+							if (result) return result;
+						}
+
+						return null;
+					}
+
+					channelId = findBrowseId(jsonData);
+					if (channelId) return false; 
+				} catch (error) {
+					console.error('Failed to parse JSON:', error);
+				}
 			}
 		}
 	});
@@ -73,7 +99,7 @@ export async function extractHtml(response: Response): Promise<string> {
 	return text;
 }
 
-export function extractRssHrefFromHtml(html: string):string {
+export function extractRssHrefFromHtml(html: string): string {
 	try {
 		const $ = cheerio.load(html);
 
@@ -90,17 +116,17 @@ export function extractRssHrefFromHtml(html: string):string {
 	}
 }
 
-export function generateChannelUrl(id: string):string {
+export function generateChannelUrl(id: string): string {
 	const baseUrl = 'https://www.youtube.com/channel';
 	return `${baseUrl}/${id}`;
 }
 
-export function generateRsslUrl(id: string):string {
+export function generateRsslUrl(id: string): string {
 	const baseUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id';
 	return `${baseUrl}=${id}`;
 }
 
-export function extractChannelIdFromChannelHref(href: string):string {
+export function extractChannelIdFromChannelHref(href: string): string {
 	try {
 		const url = new URL(href);
 		const searchParams = url.searchParams;
