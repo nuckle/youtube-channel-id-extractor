@@ -9,7 +9,7 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-	serverExternalPackages: ['header-generator'],
+	serverExternalPackages: ['header-generator', 'pino', 'pinno-pretty'],
 	reactStrictMode: true,
 };
 

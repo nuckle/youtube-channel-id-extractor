@@ -10,6 +10,10 @@ import {
 	generateRsslUrl,
 } from './helpers';
 
+import { logger } from '@/app/lib/logger';
+
+const log = logger.child({ module: 'parser' });
+
 export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 	try {
 		const response = await customFetch(url);
@@ -18,6 +22,7 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			throw new Error('No initial response');
 		}
 
+		log.debug(`Fetched HTML from ${url}`);
 		const html = await extractHtml(response);
 		const id = await extractChannelIdFromHtml(html);
 		const channelUrl = generateChannelUrl(id);
@@ -32,6 +37,7 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			name: name,
 		};
 	} catch (error) {
+		log.error(error);
 		throw new Error(`Failed to process the URL: ${error}`);
 	}
 }

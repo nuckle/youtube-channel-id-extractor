@@ -4,11 +4,16 @@ import { fetchChannelData } from '@/app/lib/parser';
 import { urlSchema } from '@/app/lib/schemas';
 import { ChannelType } from '@/app/types/channelType';
 
+import { logger } from '@/app/lib/logger';
+
+const log = logger.child({ module: 'action' });
+
 export async function fetchChannelAction(
 	state: ChannelType,
 	formData: FormData,
 ): Promise<ChannelType> {
 	try {
+		log.debug('Server channel action is running');
 		const url = formData.get('channel_url') as string;
 		const result = urlSchema.safeParse({ url });
 
@@ -22,6 +27,7 @@ export async function fetchChannelAction(
 			return { message: errorMessage, data: null, errors: errors };
 		}
 	} catch (error) {
+		log.error(error);
 		if (typeof error === 'string') {
 			return {
 				message: 'Failed to process the URL',
