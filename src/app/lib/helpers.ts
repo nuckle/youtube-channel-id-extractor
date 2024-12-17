@@ -39,20 +39,12 @@ export async function extractChannelIdFromHtml(html: string): Promise<string> {
 }
 
 export async function extractChannelNameFromHtml(html: string) {
-	try {
-		const $ = cheerio.load(html);
+	const $ = cheerio.load(html);
 
-		const linkElement = $('link[itemprop="name"]');
-		const name = linkElement.attr('content');
+	const linkElement = $('link[itemprop="name"]');
+	const name = linkElement.attr('content');
 
-		if (!name) throw new Error('Name was not found in html');
-
-		return name;
-	} catch (error) {
-		throw new Error(
-			`An error happened during channel name extraction from Html: ${error}`,
-		);
-	}
+	return name;
 }
 
 async function extractIdFromHtmlJson(html: string): Promise<string | null> {

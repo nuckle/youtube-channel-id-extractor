@@ -21,17 +21,17 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 		const html = await extractHtml(response);
 		const id = await extractChannelIdFromHtml(html);
 		const channelUrl = generateChannelUrl(id);
-		let name;
 
 		// Depending on IP, html may not contain
 		// the link tag with channel name
-		try {
-			name = await extractChannelNameFromHtml(html);
-		} catch (error) {
+		let name = await extractChannelNameFromHtml(html);
+		if (!name) {
 			const response = await customFetch(channelUrl);
 			const html = await extractHtml(response);
 			name = await extractChannelNameFromHtml(html);
 		}
+
+		if (!name) throw new Error('Name was not found in html');
 
 		const rssUrl = generateRsslUrl(id);
 
