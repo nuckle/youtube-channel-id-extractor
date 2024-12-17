@@ -33,6 +33,6 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			rssUrl: rssUrl,
 		};
 	} catch (error) {
-		throw new Error('Failed to process the URL');
+		throw new Error(`Failed to process the URL: ${error}`);
 	}
 }

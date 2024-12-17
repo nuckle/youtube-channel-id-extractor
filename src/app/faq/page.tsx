@@ -9,7 +9,7 @@ export default function Faq() {
             <Accordion>
                 <AccordionItem key="1" aria-label="What is a YouTube Channel ID?" title="What is a YouTube Channel ID?">
                     <p>
-                        A YouTube Channel ID is a unique identifier for a YouTube channel. It's used in various YouTube APIs and can be helpful for developers and content creators.
+                        A YouTube Channel ID is a unique identifier for a YouTube channel. It&apos;s used in various YouTube APIs and can be helpful for developers and content creators.
                     </p>
                 </AccordionItem>
 
