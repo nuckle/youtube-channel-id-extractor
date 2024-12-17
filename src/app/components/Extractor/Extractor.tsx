@@ -19,7 +19,7 @@ export default function Extractor() {
                 <ExtractorInput isPending={isPending} />
 
                 {state && (
-                    <div className="mt-4">
+                    <div className="mt-5">
                         {!isPending && (
                             (state.errors && state.errors.length > 0) || state.errors === undefined) &&
                             state.message && <ErrorMessage text={state.message} />
