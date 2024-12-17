@@ -17,6 +17,7 @@
     "@nextui-org/link": "^2.2.5",
     "@nextui-org/system": "^2.4.4",
     "@nextui-org/theme": "^2.4.3",
+    "@serwist/next": "^9.0.11",
     "cheerio": "^1.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
