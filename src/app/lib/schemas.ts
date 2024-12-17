@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-const allowedYoutubeDomains = ['youtube.com', 'www.youtube.com'];
+const allowedYoutubeDomains = [
+	'youtube.com',
+	'www.youtube.com',
+	'youtu.be',
+	'm.youtube.com',
+];
 const waybackMachineDomain = 'web.archive.org';
 
 export const urlSchema = z.object({
