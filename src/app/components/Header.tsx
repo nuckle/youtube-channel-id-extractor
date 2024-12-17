@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import Image from 'next/image';
-import youtubeIcon from '../../../public/youtube.svg'
+import Link from 'next/link';
+import youtubeIcon from '../../../public/youtube.svg';
 
 export default function Header() {
     return (

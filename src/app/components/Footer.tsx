@@ -1,6 +1,6 @@
 import Image from 'next/image';
+import githubIcon from '../../../public/github.svg';
 import { cn } from "../lib/utils";
-import githubIcon from '../../../public/github.svg'
 
 export default function Footer({ className }: { className?: string }) {
 
