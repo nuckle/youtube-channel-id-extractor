@@ -2,12 +2,12 @@
 
 import { ChannelDataType } from '../types/channelType';
 import {
-    customFetch,
-    extractChannelIdFromChannelHref,
-    extractHtml,
-    extractRssHrefFromHtml,
-    generateChannelUrl,
-    generateRsslUrl,
+	customFetch,
+	extractChannelIdFromChannelHref,
+	extractHtml,
+	extractRssHrefFromHtml,
+	generateChannelUrl,
+	generateRsslUrl,
 } from './helpers';
 
 export async function fetchChannelData(url: string): Promise<ChannelDataType> {
@@ -18,7 +18,8 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			throw new Error('No initial response');
 		}
 
-		if (!response.ok) throw new Error('Invalid response code from the server');
+		if (!response.ok)
+			throw new Error('Invalid response code from the server');
 
 		const html = await extractHtml(response);
 		const href = extractRssHrefFromHtml(html);

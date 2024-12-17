@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'FAQ',
-    openGraph: {
-        title: 'FAQ'
-    },
-}
+	title: 'FAQ',
+	openGraph: {
+		title: 'FAQ',
+	},
+};
 
 export default function FaqLayout({
-    children,
+	children,
 }: Readonly<{
-    children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-    return children
+	return children;
 }
