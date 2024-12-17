@@ -7,6 +7,9 @@
   <img src="img/preview.png" alt="preview">
 </details>
 
+You can also view the page using the [following URL](https://youtube-channel-id-extractor.vercel.app/)
+
+
 ## ✨ Features 
 
 - 🌗 Dark/Light Theme: Switch between themes effortlessly
