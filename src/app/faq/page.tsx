@@ -50,7 +50,7 @@ export default function Faq() {
 							The tool also supports links from Wayback Machine:
 						</p>
 						<ul className='list-disc pl-6 mt-2'>
-							<li>
+							<li className='break-words'>
 								https://web.archive.org/web/20221218220114/https://www.youtube.com/@channel_handle
 							</li>
 						</ul>
