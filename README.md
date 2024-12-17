@@ -1,4 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎥 YouTube Channel Id Extractor
+
+## Preview
+
+<details>
+  <summary>Click to see image preview</summary>
+  <img src="img/preview.png" alt="preview">
+</details>
+
+## ✨ Features 
+
+- 🌗 Dark/Light Theme: Switch between themes effortlessly
+- 🔗 URL Support: Works with YouTube and Wayback Machine URLs
+- 📱 Progressive Web App (PWA): Installable and offline-ready
 
 ## Getting Started
 
