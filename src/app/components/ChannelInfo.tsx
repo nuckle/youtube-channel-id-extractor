@@ -6,7 +6,7 @@ import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 import { ChannelDataType } from "../types/channelType";
 
-export default function ChannelInfo({ id, channelUrl }: ChannelDataType) {
+export default function ChannelInfo({ id, channelUrl, rssUrl }: ChannelDataType) {
 
     const [isCopied, setIsCopied] = useState(false)
 
@@ -46,7 +46,7 @@ export default function ChannelInfo({ id, channelUrl }: ChannelDataType) {
                         </Button>
                     </div>
                 </div>
-                <div>
+                <div className='mb-2'>
                     <p className="text-sm text-muted-foreground mb-1">Channel URL:</p>
                     <Link
                         isExternal
@@ -55,6 +55,17 @@ export default function ChannelInfo({ id, channelUrl }: ChannelDataType) {
                         className="whitespace-nowrap"
                     >
                         {channelUrl}
+                    </Link>
+                </div>
+                <div>
+                    <p className="text-sm text-muted-foreground mb-1">RSS Feed URL:</p>
+                    <Link
+                        isExternal
+                        showAnchorIcon
+                        href={rssUrl}
+                        className="whitespace-nowrap"
+                    >
+                        {rssUrl}
                     </Link>
                 </div>
             </CardBody>

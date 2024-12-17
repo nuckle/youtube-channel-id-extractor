@@ -48,6 +48,11 @@ export function generateChannelUrl(id: string) {
 	return `${baseUrl}/${id}`;
 }
 
+export function generateRsslUrl(id: string) {
+	const baseUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id';
+	return `${baseUrl}=${id}`;
+}
+
 export function extractChannelIdFromChannelHref(href: string) {
 	try {
 		const url = new URL(href);

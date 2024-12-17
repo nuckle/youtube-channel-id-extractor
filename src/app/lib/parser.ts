@@ -1,14 +1,16 @@
 'use server';
 
+import { ChannelDataType } from '../types/channelType';
 import {
     customFetch,
     extractChannelIdFromChannelHref,
     extractHtml,
     extractRssHrefFromHtml,
     generateChannelUrl,
+    generateRsslUrl,
 } from './helpers';
 
-export async function fetchChannelData(url: string) {
+export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 	try {
 		const response = await customFetch(url);
 
@@ -23,10 +25,12 @@ export async function fetchChannelData(url: string) {
 
 		const id = extractChannelIdFromChannelHref(href);
 		const channelUrl = generateChannelUrl(id);
+		const rssUrl = generateRsslUrl(id);
 
 		return {
 			id: id,
 			channelUrl: channelUrl,
+			rssUrl: rssUrl,
 		};
 	} catch (error) {
 		throw new Error('Failed to process the URL');

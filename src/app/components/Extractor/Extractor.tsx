@@ -24,8 +24,8 @@ export default function Extractor() {
                             (state.errors && state.errors.length > 0) || state.errors === undefined) &&
                             state.message && <ErrorMessage text={state.message} />
                         }
-                        {state.data && state.data.id && state.data.channelUrl && <ChannelInfo 
-                           id={state.data.id} channelUrl={state.data.channelUrl} />}
+                        {state.data && state.data.id && state.data.channelUrl && state.data.rssUrl && <ChannelInfo 
+                           id={state.data.id} channelUrl={state.data.channelUrl} rssUrl={state.data.rssUrl} />}
                     </div>
                 )}
             </form>
