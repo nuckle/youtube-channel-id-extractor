@@ -18,13 +18,21 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			throw new Error('No initial response');
 		}
 
-		if (!response.ok) throw new Error('Invalid response code from the server');
-
 		const html = await extractHtml(response);
 		const id = await extractChannelIdFromHtml(html);
-		const name = await extractChannelNameFromHtml(html);
-
 		const channelUrl = generateChannelUrl(id);
+		let name;
+
+		// Depending on IP, html may not contain
+		// the link tag with channel name
+		try {
+			name = await extractChannelNameFromHtml(html);
+		} catch (error) {
+			const response = await customFetch(channelUrl);
+			const html = await extractHtml(response);
+			name = await extractChannelNameFromHtml(html);
+		}
+
 		const rssUrl = generateRsslUrl(id);
 
 		return {
