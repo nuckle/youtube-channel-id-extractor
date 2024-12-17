@@ -56,7 +56,7 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 
 	$('script').each((_, element) => {
 		const scriptContent = $(element).html();
-		if (scriptContent && scriptContent.includes('videoSecondaryInfoRenderer')) {
+		if (scriptContent && scriptContent.includes('structuredDescriptionContentRenderer')) {
 			const match = scriptContent.match(/var ytInitialData = ({[\s\S]*?});/);
 			if (match) {
 				try {
@@ -68,7 +68,7 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 						if (typeof obj !== 'object' || obj === null) return null;
 
 						const browseId =
-							obj.videoOwnerRenderer?.title?.runs?.[0]?.navigationEndpoint
+							obj.videoDescriptionHeaderRenderer?.channelNavigationEndpoint
 								?.browseEndpoint?.browseId;
 						if (browseId) return browseId;
 

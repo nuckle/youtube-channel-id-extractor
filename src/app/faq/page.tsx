@@ -46,6 +46,7 @@ export default function Faq() {
 							<li>https://www.youtube.com/@channel_handle</li>
 							<li>https://www.youtube.com/c/custom_url</li>
 							<li>https://www.youtube.com/watch?v=video_url</li>
+							<li>https://www.youtube.com/shorts/shorts_url</li>
 							<li>https://www.youtube.com/playlist?list=playlist_url</li>
 						</ul>
 						<p className='mt-2'>

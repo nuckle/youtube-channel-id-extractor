@@ -1,22 +1,14 @@
-type NavigationEndpoint = {
+type browseEndpointType = {
 	browseEndpoint?: {
 		browseId?: string;
 	};
 };
 
-type Runs = {
-	navigationEndpoint?: NavigationEndpoint;
-};
-
-type Title = {
-	runs?: Runs[];
-};
-
-type VideoOwnerRenderer = {
-	title?: Title;
+type channelNavigationType = {
+	channelNavigationEndpoint?: browseEndpointType;
 };
 
 export type browseIdType = {
-	videoOwnerRenderer?: VideoOwnerRenderer;
+	videoDescriptionHeaderRenderer?: channelNavigationType;
 	[key: string]: unknown;
 };
