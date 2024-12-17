@@ -1,32 +1,40 @@
 'use client';
 
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
+
 export default function Faq() {
     return (
-        <>
-            <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-            <section className="mb-6">
-                <h3 className="font-semibold">What is a YouTube Channel ID?</h3>
-                <p>A YouTube Channel ID is a unique identifier for a YouTube channel. It's used in various YouTube APIs and can be helpful for developers and content creators.
-                </p>
-            </section>
+        <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl sm:text-4xl font-bold text-center mb-8">Frequently Asked Questions</h1>
+            <Accordion>
+                <AccordionItem key="1" aria-label="What is a YouTube Channel ID?" title="What is a YouTube Channel ID?">
+                    <p>
+                        A YouTube Channel ID is a unique identifier for a YouTube channel. It's used in various YouTube APIs and can be helpful for developers and content creators.
+                    </p>
+                </AccordionItem>
 
-            <section className="mb-6">
-                <h3 className="font-semibold">How do I use this tool?</h3>
-                <p>Simply paste the URL of a YouTube channel into the input field on the home page and click the search button. The tool will extract and display the channel ID for you.</p>
-            </section>
+                <AccordionItem key="2" aria-label="How do I use this tool?" title="How do I use this tool?">
+                    <p>
+                        Simply paste the URL of a YouTube channel into the input field on the home page and click the search button. The tool will extract and display the channel ID for you.
+                    </p>
+                </AccordionItem>
 
-            <section className="mb-6">
-                <h3 className="font-semibold">Supported URL formats</h3>
-                <p>This tool supports the following URL formats</p>
-                <ul>
-                    <li>https://www.youtube.com/channel/channel_id</li>
-                    <li>https://www.youtube.com/user/username</li>
-                    <li>https://www.youtube.com/@channel_handle</li>
-                    <li>https://www.youtube.com/c/custom_url</li>
-                </ul>
-                <p>Also the tool supports links from Wayback Machine</p>
-                <li>https://web.archive.org/web/20221218220114/https://www.youtube.com/@channel_handle</li>
-            </section>
-        </>
+                <AccordionItem key="3" aria-label="What URL formats are supported?" title="What URL formats are supported?">
+                    <div>
+                        <p>This tool supports the following URL formats:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                            <li>https://www.youtube.com/channel/channel_id</li>
+                            <li>https://www.youtube.com/user/username</li>
+                            <li>https://www.youtube.com/@channel_handle</li>
+                            <li>https://www.youtube.com/c/custom_url</li>
+                        </ul>
+                        <p className="mt-2">The tool also supports links from Wayback Machine:</p>
+                        <ul className="list-disc pl-6 mt-2">
+                            <li>https://web.archive.org/web/20221218220114/https://www.youtube.com/@channel_handle</li>
+                        </ul>
+                    </div>
+                </AccordionItem>
+            </Accordion>
+        </div>
     )
 }
