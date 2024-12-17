@@ -38,7 +38,7 @@ export default function ChannelInfo({ id, channelUrl, rssUrl }: ChannelDataType)
                             <Button
                                 size='sm'
                                 isIconOnly
-                                onPress={() => copyToClipboard('UCa9eML87RIvw8vRD92n81UA')}
+                                onPress={() => copyToClipboard(id)}
                                 aria-label="Copy to clipboard"
                                 className="min-w-[24px] w-[24px] h-[24px] p-0"
                             >
