@@ -2,6 +2,7 @@ import 'server-only';
 
 import * as cheerio from 'cheerio';
 import { HeaderGenerator } from 'header-generator';
+import { browseIdType } from '../types/browseIdType';
 
 type Headers = Record<string, string>;
 export function getHeaders(headers = {}): Headers {
@@ -62,27 +63,28 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 					const jsonData = JSON.parse(match[1]);
 
 					// Traverse JSON to locate `videoOwnerRenderer`
-					function findBrowseId(obj: Record<string, any>): string | null {
+
+					function findBrowseId(obj: browseIdType): string | null {
 						if (typeof obj !== 'object' || obj === null) return null;
 
-						if (
+						const browseId =
 							obj.videoOwnerRenderer?.title?.runs?.[0]?.navigationEndpoint
-								?.browseEndpoint?.browseId
-						) {
-							return obj.videoOwnerRenderer.title.runs[0].navigationEndpoint
-								.browseEndpoint.browseId;
-						}
+								?.browseEndpoint?.browseId;
+						if (browseId) return browseId;
 
 						for (const key in obj) {
-							const result = findBrowseId(obj[key]);
-							if (result) return result;
+							const value = obj[key];
+							if (typeof value === 'object' && value !== null) {
+								const result = findBrowseId(value as browseIdType);
+								if (result) return result;
+							}
 						}
 
 						return null;
 					}
 
 					channelId = findBrowseId(jsonData);
-					if (channelId) return false; 
+					if (channelId) return false;
 				} catch (error) {
 					console.error('Failed to parse JSON:', error);
 				}
