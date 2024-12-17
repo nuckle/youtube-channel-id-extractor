@@ -32,7 +32,6 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 			name: name,
 		};
 	} catch (error) {
-		console.log(error);
 		throw new Error(`Failed to process the URL: ${error}`);
 	}
 }
