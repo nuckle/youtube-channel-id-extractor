@@ -107,7 +107,8 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 		if (
 			scriptContent &&
 			(scriptContent.includes('structuredDescriptionContentRenderer') ||
-				scriptContent.includes('twoColumnWatchNextResults'))
+				scriptContent.includes('twoColumnWatchNextResults') ||
+				scriptContent.includes('twoColumnBrowseResultsRenderer'))
 		) {
 			const match =
 				scriptContent.match(/var ytInitialData = ({[\s\S]*?});/) ||
@@ -151,12 +152,12 @@ export async function extractChannelNameFromHtml(
 		const extractors = [
 			extractChannelNameFromHtmlJson,
 			extractChannelNameFromHtmlLinkTag,
-			extractChannelNameFromHtmlMetaTag,
 			async () => {
 				const response = await customFetch(channelUrl);
 				const newHtml = await extractHtml(response);
 				return extractChannelNameFromHtmlLinkTag(newHtml);
 			},
+			extractChannelNameFromHtmlMetaTag,
 		];
 
 		for (const extractor of extractors) {
