@@ -7,13 +7,13 @@
   <img src="img/preview.png" alt="preview">
 </details>
 
-You can also view the page using the [following URL](https://youtube-channel-id-extractor.vercel.app/)
+Live demo: [YouTube Channel ID Extractor](https://youtube-channel-id-extractor.vercel.app/)
 
 
 ## ✨ Features 
 
 - 🌗 Dark/Light Theme: Switch between themes effortlessly
-- 🔗 URL Support: Works with YouTube and Wayback Machine URLs
+- 🔗 URL Parsing: Supports a wide range of YouTube URLs, including those from the Wayback Machine
 - 📱 Progressive Web App (PWA): Installable and offline-ready
 
 ## Getting Started
@@ -50,3 +50,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## License
+
+This project is licensed under the [GNU Affero General Public License](LICENSE). Feel free to use, modify, and distribute it as per the license terms.
