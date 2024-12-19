@@ -18,7 +18,7 @@ export default function ExtractorInput({ isPending }: ExtractorInputProps) {
 				inputWrapper: 'pr-0',
 			}}
 			endContent={
-				<Button type='submit' isIconOnly variant='light' aria-label='Search'>
+				<Button type='submit' isIconOnly variant='light' aria-label='Submit YouTube channel URL'>
 					{isPending ? <Spinner /> : <Search className='h-5 w-5' />}
 				</Button>
 			}
