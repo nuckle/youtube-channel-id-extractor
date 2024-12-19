@@ -1,6 +1,7 @@
 'use client';
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import ListItem from '../components/faq/ListItem';
 
 export default function Faq() {
 	return (
@@ -41,21 +42,21 @@ export default function Faq() {
 					<div>
 						<p>This tool supports the following URL formats:</p>
 						<ul className='list-disc pl-6 mt-2 space-y-1'>
-							<li>https://www.youtube.com/channel/channel_id</li>
-							<li>https://www.youtube.com/user/username</li>
-							<li>https://www.youtube.com/@channel_handle</li>
-							<li>https://www.youtube.com/c/custom_url</li>
-							<li>https://www.youtube.com/watch?v=video_url</li>
-							<li>https://www.youtube.com/shorts/shorts_url</li>
-							<li>https://www.youtube.com/playlist?list=playlist_url</li>
+							<ListItem>https://www.youtube.com/channel/channel_id</ListItem>
+							<ListItem>https://www.youtube.com/user/username</ListItem>
+							<ListItem>https://www.youtube.com/@channel_handle</ListItem>
+							<ListItem>https://www.youtube.com/c/custom_url</ListItem>
+							<ListItem>https://www.youtube.com/watch?v=video_url</ListItem>
+							<ListItem>https://www.youtube.com/shorts/shorts_url</ListItem>
+							<ListItem>https://www.youtube.com/playlist?list=playlist_url</ListItem>
 						</ul>
 						<p className='mt-2'>
 							The tool also supports links from Wayback Machine:
 						</p>
 						<ul className='list-disc pl-6 mt-2'>
-							<li className='break-words'>
+							<ListItem>
 								https://web.archive.org/web/20211218220114/https://www.youtube.com/c/custom_url
-							</li>
+							</ListItem>
 						</ul>
 					</div>
 				</AccordionItem>
