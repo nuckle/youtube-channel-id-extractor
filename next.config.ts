@@ -11,6 +11,9 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
 	serverExternalPackages: ['header-generator', 'pino', 'pinno-pretty'],
 	reactStrictMode: true,
+	experimental: {
+		optimizePackageImports: ['lucide-react', '@nextui-org/button'],
+	},
 };
 
 export default withSerwist(nextConfig);
