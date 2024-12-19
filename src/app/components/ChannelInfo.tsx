@@ -50,6 +50,7 @@ export default function ChannelInfo({
 								isIconOnly
 								onPress={() => copyToClipboard(id)}
 								aria-label='Copy to clipboard'
+								title='Copy to clipboard'
 								className='min-w-[24px] w-[24px] h-[24px] p-0'
 							>
 								{isCopied ? (

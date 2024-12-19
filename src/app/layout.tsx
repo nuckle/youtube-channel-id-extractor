@@ -43,7 +43,7 @@ export default function RootLayout({
 		// https://github.com/pacocoursey/next-themes
 		<html lang='en' suppressHydrationWarning>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-				<Providers themeProps={{ attribute: 'class' }}>
+				<Providers themeProps={{ attribute: 'class', defaultTheme:'system', enableSystem: true }}>
 					<div className='max-w-screen-md m-auto px-4 min-h-screen flex flex-col'>
 						<Header />
 						<main>{children}</main>

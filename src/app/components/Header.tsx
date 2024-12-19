@@ -1,13 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import youtubeIcon from '../../../public/youtube.svg';
+import { Button } from '@nextui-org/button';
+import ThemeSwitch from './ThemeSwitch';
 
 export default function Header() {
 	return (
 		<>
 			<header className='mb-4'>
 				<nav>
-					<ul className='flex justify-between py-5 align-center flex-row flex-wrap'>
+					<ul className='flex justify-between py-5 items-center flex-row flex-wrap'>
 						<li>
 							<h1>
 								<Link className='title flex' href='/'>
@@ -22,12 +24,23 @@ export default function Header() {
 							</h1>
 						</li>
 						<li>
-							<Link
-								href='/faq'
-								className='hover:text-blue-500 dark:hover:text-blue-400'
-							>
-								FAQ
-							</Link>
+							<div className='flex items-center gap-x-2'>
+								<Button
+									isIconOnly
+									aria-label='Toggle Theme'
+									title='Toggle Theme'
+									size='sm'
+									variant='light'
+								>
+									<ThemeSwitch />
+								</Button>
+								<Link
+									href='/faq'
+									className='hover:text-blue-500 dark:hover:text-blue-400'
+								>
+									FAQ
+								</Link>
+							</div>
 						</li>
 					</ul>
 				</nav>
