@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import youtubeIcon from '../../../public/youtube.svg';
-import { Button } from '@nextui-org/button';
 import ThemeSwitch from './ThemeSwitch';
 
 export default function Header() {
@@ -25,15 +24,7 @@ export default function Header() {
 						</li>
 						<li>
 							<div className='flex items-center gap-x-2'>
-								<Button
-									isIconOnly
-									aria-label='Toggle Theme'
-									title='Toggle Theme'
-									size='sm'
-									variant='light'
-								>
-									<ThemeSwitch />
-								</Button>
+								<ThemeSwitch />
 								<Link
 									href='/faq'
 									className='hover:text-blue-500 dark:hover:text-blue-400'
