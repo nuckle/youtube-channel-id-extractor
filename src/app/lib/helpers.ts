@@ -133,6 +133,14 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 									?.browseEndpoint?.browseId || null,
 						);
 					}
+
+					if (!channelId) {
+						channelId = findValueByKeyPath(
+							jsonData,
+							(obj) =>
+								obj.tabRenderer?.endpoint?.browseEndpoint?.browseId || null,
+						);
+					}
 					if (channelId) return false;
 				} catch (error) {
 					console.error('Failed to parse JSON:', error);

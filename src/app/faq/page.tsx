@@ -49,6 +49,7 @@ export default function Faq() {
 							<ListItem>https://www.youtube.com/watch?v=video_url</ListItem>
 							<ListItem>https://www.youtube.com/shorts/shorts_url</ListItem>
 							<ListItem>https://www.youtube.com/playlist?list=playlist_url</ListItem>
+							<ListItem>https://www.youtube.com/post/post_url</ListItem>
 						</ul>
 						<p className='mt-2'>
 							The tool also supports links from Wayback Machine:
