@@ -27,7 +27,7 @@ export default function Header() {
 						/>
 						<span>Channel ID Extractor</span>
 					</Link>
-					<ul className='flex items-center space-x-6'>
+					<ul className='flex items-center space-x-5'>
 						<li>
 							<Link
 								href='/history'
