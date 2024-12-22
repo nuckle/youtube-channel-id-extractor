@@ -1,11 +1,6 @@
-'use client';
-
-import ChannelInfo from '../components/ChannelInfo/ChannelInfo';
-import { useStore } from '../hooks/useStore';
+import Channels from '../components/Channels';
 
 export default function History() {
-	const { getAllChannels } = useStore();
-
 	return (
 		<>
 			<h2 className='font-semibold'>Channel History</h2>
@@ -14,23 +9,7 @@ export default function History() {
 				You can see all of them here to manage them better.
 			</p>
 
-			<ul>
-				{getAllChannels === undefined ? (
-					<li>Loading...</li>
-				) : (
-					<>
-						{getAllChannels?.map((channel, i) => (
-							<li key={i} className='mb-3'>
-								<ChannelInfo
-									id={channel.id}
-									channelId={channel.channelId}
-									name={channel.name}
-								/>
-							</li>
-						))}
-					</>
-				)}
-			</ul>
+			<Channels />
 		</>
 	);
 }

@@ -1,4 +1,4 @@
-'use client';
+'use client'; // https://github.com/nextui-org/nextui/issues/1574
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import ListItem from '../components/faq/ListItem';
