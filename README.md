@@ -15,6 +15,7 @@ Live demo: [YouTube Channel ID Extractor](https://youtube-channel-id-extractor.v
 - 🌗 Dark/Light Theme: Switch between themes effortlessly
 - 🔗 URL Parsing: Supports a wide range of YouTube URLs, including those from the Wayback Machine
 - 📱 Progressive Web App (PWA): Installable and offline-ready
+- 📜 History of Parsed Channels: Keeps a record of previously parsed channels 
 
 ## Getting Started
 
