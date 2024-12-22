@@ -5,8 +5,6 @@ export type ChannelType = {
 };
 
 export type ChannelDataType = {
-	id: string;
+	channelId: string;
 	name: string;
-	channelUrl: string;
-	rssUrl: string;
 };

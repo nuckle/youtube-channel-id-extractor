@@ -253,16 +253,6 @@ export async function extractHtml(response: Response): Promise<string> {
 	return text;
 }
 
-export function generateChannelUrl(id: string): string {
-	const baseUrl = 'https://www.youtube.com/channel';
-	return `${baseUrl}/${id}`;
-}
-
-export function generateRsslUrl(id: string): string {
-	const baseUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id';
-	return `${baseUrl}=${id}`;
-}
-
 export async function customFetch(
 	url: string,
 	headers: Record<string, string> = {},

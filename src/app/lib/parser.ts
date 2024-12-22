@@ -6,9 +6,8 @@ import {
 	extractChannelIdFromHtml,
 	extractChannelNameFromHtml,
 	extractHtml,
-	generateChannelUrl,
-	generateRsslUrl,
 } from './helpers';
+import { generateChannelUrl } from './utils';
 
 import { logger } from '@/app/lib/logger';
 
@@ -28,12 +27,8 @@ export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 		const channelUrl = generateChannelUrl(id);
 		const name = await extractChannelNameFromHtml(html, channelUrl);
 
-		const rssUrl = generateRsslUrl(id);
-
 		return {
-			id: id,
-			channelUrl: channelUrl,
-			rssUrl: rssUrl,
+			channelId: id,
 			name: name,
 		};
 	} catch (error) {

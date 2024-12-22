@@ -1,6 +1,7 @@
-import { useActionState } from 'react';
+import { useStore } from '@/app/hooks/useStore';
+import { useActionState, useEffect } from 'react';
 import { fetchChannelAction } from '../../server/actions/action';
-import ChannelInfo from '../ChannelInfo';
+import ChannelInfo from '../ChannelInfo/ChannelInfo';
 import ErrorMessage from '../ErrorMessage';
 import ExtractorInput from './ExtractorInput';
 
@@ -16,6 +17,15 @@ export default function Extractor() {
 		initialState,
 	);
 
+	const { addChannel } = useStore();
+
+	useEffect(() => {
+		if (state?.data?.channelId && state?.data?.name) {
+			addChannel(state.data.channelId, state.data.name);
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state?.data]);
+
 	return (
 		<>
 			<form action={formAction}>
@@ -27,18 +37,9 @@ export default function Extractor() {
 							((state.errors && state.errors.length > 0) ||
 								state.errors === undefined) &&
 							state.message && <ErrorMessage text={state.message} />}
-						{state.data &&
-							state.data.id &&
-							state.data.name &&
-							state.data.channelUrl &&
-							state.data.rssUrl && (
-								<ChannelInfo
-									name={state.data.name}
-									id={state.data.id}
-									channelUrl={state.data.channelUrl}
-									rssUrl={state.data.rssUrl}
-								/>
-							)}
+						{state.data && state.data.channelId && state.data.name && (
+							<ChannelInfo channelId={state.data.channelId} name={state.data.name} />
+						)}
 					</div>
 				)}
 			</form>

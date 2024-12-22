@@ -1,3 +1,5 @@
+import { generateChannelUrl, generateRsslUrl } from '@/app/lib/utils';
+import { ChannelDataType } from '@/app/types/channelType';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { Divider } from '@nextui-org/divider';
@@ -6,14 +8,13 @@ import { Skeleton } from '@nextui-org/skeleton';
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { ChannelDataType } from '../types/channelType';
+import ChannelDeleteButton from './ChannelDeleteButton';
 
-export default function ChannelInfo({
-	id,
-	channelUrl,
-	rssUrl,
-	name,
-}: ChannelDataType) {
+interface ChannelInfoProps extends ChannelDataType {
+	id?: number;
+}
+
+export default function ChannelInfo({ id, channelId, name }: ChannelInfoProps) {
 	const { pending } = useFormStatus();
 	const [isCopied, setIsCopied] = useState(false);
 
@@ -27,10 +28,17 @@ export default function ChannelInfo({
 		}
 	};
 
+	const rssUrl = generateRsslUrl(channelId);
+	const channelUrl = generateChannelUrl(channelId);
+
 	return (
 		<Card>
 			<CardHeader>
-				<h2>Channel Info</h2>
+				<div className='flex gap-x-2 items-center'>
+					<h2>Channel Info</h2>
+
+					{id && <ChannelDeleteButton id={id} /> }
+				</div>
 			</CardHeader>
 			<Divider />
 			<CardBody>
@@ -44,11 +52,11 @@ export default function ChannelInfo({
 					<p className='text-sm text-muted-foreground'>Channel ID:</p>
 					<Skeleton className='flex items-center space-x-2' isLoaded={!pending}>
 						<div className='flex items-center space-x-2'>
-							<p className='text-sm font-medium'>{id}</p>
+							<p className='text-sm font-medium'>{channelId}</p>
 							<Button
 								size='sm'
 								isIconOnly
-								onPress={() => copyToClipboard(id)}
+								onPress={() => copyToClipboard(channelId)}
 								aria-label='Copy to clipboard'
 								title='Copy to clipboard'
 								className='min-w-[24px] w-[24px] h-[24px] p-0'
