@@ -13,12 +13,22 @@ export const useStore = () => {
 		await db.channels.delete(id);
 	};
 
-	const getAllChannels = useLiveQuery(async () => {
-		return await db.channels.toArray();
+	const getAllChannels = (pageNumber: number, pageSize: number) => {
+		const offset = (pageNumber - 1) * pageSize;
+
+		return useLiveQuery(
+			() => db.channels.offset(offset).limit(pageSize).toArray(),
+			[offset, pageSize],
+		);
+	};
+
+	const countAllChannels = useLiveQuery(async () => {
+		return await db.channels.count();
 	});
 
 	return {
 		addChannel,
+		countAllChannels,
 		deleteChannel,
 		getAllChannels,
 	};
