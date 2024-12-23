@@ -1,8 +1,8 @@
 'use client';
 
-import ChannelInfo from './ChannelInfo/ChannelInfo';
 import { useStore } from '../hooks/useStore';
 import { cn } from '../lib/utils';
+import ChannelInfo from './ChannelInfo/ChannelInfo';
 
 interface ChannelsProps {
 	pageNumber: number;

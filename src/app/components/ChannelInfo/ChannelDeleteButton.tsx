@@ -21,18 +21,16 @@ export default function ChannelDeleteButton({ id }: ChannelDeleteButtonProps) {
 	};
 
 	return (
-		<>
-			<Button
-				isIconOnly
-				aria-label='Toggle Theme'
-				title='Toggle Theme'
-				size='sm'
-				variant='light'
-				onPress={handleDelete}
-				isLoading={loading}
-			>
-				<Trash2 />
-			</Button>
-		</>
+		<Button
+			isIconOnly
+			aria-label='Toggle Theme'
+			title='Toggle Theme'
+			size='sm'
+			variant='light'
+			onPress={handleDelete}
+			isLoading={loading}
+		>
+			<Trash2 />
+		</Button>
 	);
 }

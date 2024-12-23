@@ -1,14 +1,12 @@
 'use client';
 
-import Channels from '../components/Channels';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { useStore } from '../hooks/useStore';
 import { Pagination } from '@nextui-org/pagination';
+import { useEffect, useState } from 'react';
+import Channels from '../components/Channels';
+import DeleteAllChannelsButton from '../components/History/DeleteAllChannelsButton';
+import { useStore } from '../hooks/useStore';
 
-export default function History(props: {
-	searchParams?: Promise<{ query?: string; page?: string }>;
-}) {
+export default function History() {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const { countAllChannels } = useStore();
@@ -21,7 +19,7 @@ export default function History(props: {
 		if (currentPage > channelsTotal) {
 			setCurrentPage(channelsTotal);
 		}
-	}, [channelsCount]);
+	}, [channelsCount, currentPage, channelsTotal]);
 
 	return (
 		<>
@@ -30,13 +28,23 @@ export default function History(props: {
 				The Channels you search for are saved offline in your browser automatically.
 				You can see all of them here to manage them better.
 			</p>
-			<Channels pageNumber={currentPage} pageSize={channelsLimit} className='mb-2' />
+
 			{channelsCount > 0 && (
-				<Pagination
-					page={currentPage}
-					total={channelsTotal}
-					onChange={setCurrentPage}
-				/>
+				<>
+					<DeleteAllChannelsButton className='mb-3' />
+
+					<Channels
+						pageNumber={currentPage}
+						pageSize={channelsLimit}
+						className='mb-2'
+					/>
+
+					<Pagination
+						page={currentPage}
+						total={channelsTotal}
+						onChange={setCurrentPage}
+					/>
+				</>
 			)}
 		</>
 	);

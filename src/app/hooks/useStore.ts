@@ -13,11 +13,16 @@ export const useStore = () => {
 		await db.channels.delete(id);
 	};
 
+	const deleteAllChannels = async () => {
+		await db.channels.clear();
+	};
+
+	/* eslint-disable react-hooks/rules-of-hooks */
 	const getAllChannels = (pageNumber: number, pageSize: number) => {
 		const offset = (pageNumber - 1) * pageSize;
 
 		return useLiveQuery(
-			() => db.channels.offset(offset).limit(pageSize).toArray(),
+			() => db.channels.reverse().offset(offset).limit(pageSize).toArray(),
 			[offset, pageSize],
 		);
 	};
@@ -30,6 +35,7 @@ export const useStore = () => {
 		addChannel,
 		countAllChannels,
 		deleteChannel,
+		deleteAllChannels,
 		getAllChannels,
 	};
 };
