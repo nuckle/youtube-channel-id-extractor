@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import './globals.css';
+import { getWebsiteDomain } from './lib/helpers';
 import { Providers } from './providers';
 
 const geistSans = Geist({
@@ -16,6 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 const titleContent = 'Youtube Channel Id Extractor';
+const descriptionContent = 'A tool to extract Youtube Channel ID';
 
 export const metadata: Metadata = {
 	authors: [
@@ -28,7 +30,17 @@ export const metadata: Metadata = {
 		template: `%s | ${titleContent}`,
 		default: `${titleContent}`,
 	},
-	description: 'A tool to extract Youtube Channel ID',
+	openGraph: {
+		type: 'website',
+		url: `https://${getWebsiteDomain()}`,
+		description: `${descriptionContent}`,
+		title: {
+			template: `%s | ${titleContent}`,
+			default: `${titleContent}`,
+		},
+		siteName: `${titleContent}`,
+	},
+	description: `${descriptionContent}`,
 	keywords:
 		'youtube channel information, youtube channel id, get youtube channel id, extract youtube rss feed, youtube free channel parser',
 };

@@ -295,3 +295,9 @@ export const delay = (ms: number) => {
 		setTimeout(resolve, ms);
 	});
 };
+
+export function getWebsiteDomain(): string {
+	const websiteDomain = process.env.WEBSITE_DOMAIN || 'example.com';
+
+	return websiteDomain;
+}
