@@ -137,8 +137,7 @@ async function extractIdFromHtmlJson(html: string): Promise<string | null> {
 					if (!channelId) {
 						channelId = findValueByKeyPath(
 							jsonData,
-							(obj) =>
-								obj.tabRenderer?.endpoint?.browseEndpoint?.browseId || null,
+							(obj) => obj.tabRenderer?.endpoint?.browseEndpoint?.browseId || null,
 						);
 					}
 					if (channelId) return false;
@@ -257,7 +256,7 @@ export async function customFetch(
 	url: string,
 	headers: Record<string, string> = {},
 ): Promise<Response> {
-	const maxRetries = 4;
+	const maxRetries = 2;
 
 	for (let attempt = 1; attempt <= maxRetries; attempt++) {
 		try {
@@ -266,7 +265,7 @@ export async function customFetch(
 				headers: getHeaders(headers),
 			});
 
-			if (!response.ok) {
+			if (!response.ok && response.status !== 404) {
 				throw new Error(`Failed to access the host. Status: ${response.status}`);
 			}
 
@@ -300,4 +299,28 @@ export function getWebsiteDomain(): string {
 	const websiteDomain = process.env.WEBSITE_DOMAIN || 'example.com';
 
 	return websiteDomain;
+}
+
+export async function getWaybackMachineSnapshotUrl(
+	url: string,
+): Promise<string | undefined> {
+	try {
+		const waybackMachineUrlConstructor = (url: string) => {
+			return `https://archive.org/wayback/available?url=${url}`;
+		};
+		const response = await customFetch(waybackMachineUrlConstructor(url));
+
+		if (!response) {
+			throw new Error('No initial response');
+		}
+
+		const responseJson = await response.json();
+		const snapshotUrl = responseJson?.archived_snapshots.closest?.url;
+
+		if (!snapshotUrl) throw new Error('No snapshot URL');
+
+		return snapshotUrl;
+	} catch (error) {
+		throw new Error(`Failed to process the URL: ${error}`);
+	}
 }

@@ -6,6 +6,7 @@ import {
 	extractChannelIdFromHtml,
 	extractChannelNameFromHtml,
 	extractHtml,
+	getWaybackMachineSnapshotUrl,
 } from './helpers';
 import { generateChannelUrl } from './utils';
 
@@ -15,13 +16,21 @@ const log = logger.child({ module: 'parser' });
 
 export async function fetchChannelData(url: string): Promise<ChannelDataType> {
 	try {
-		const response = await customFetch(url);
+		let response = await customFetch(url);
+
+		if (response && response.status === 404) {
+			const waybackMachineSnapshotUrl = await getWaybackMachineSnapshotUrl(url);
+			if (waybackMachineSnapshotUrl) {
+				response = await customFetch(waybackMachineSnapshotUrl);
+				log.debug(`Fetched HTML from wayback machine ${url}`);
+			}
+		}
+		log.debug(`Fetched HTML from ${url}`);
 
 		if (!response) {
 			throw new Error('No initial response');
 		}
 
-		log.debug(`Fetched HTML from ${url}`);
 		const html = await extractHtml(response);
 		const id = await extractChannelIdFromHtml(html);
 		const channelUrl = generateChannelUrl(id);
