@@ -23,7 +23,7 @@ export default function Header() {
 						width={32}
 						height={32}
 					/>
-					<span>Channel ID Extractor</span>
+					<span className="title">Channel ID Extractor</span>
 				</Link>
 				<ul className='flex items-center space-x-5'>
 					<li>
